@@ -1,0 +1,76 @@
+Summary Report
+Title: Bankruptcy Prediction on Corporate Financial Indicators:
+
+Author: Dande Akshara | Date: 26-10-2025
+
+Problem statement
+
+Objective: Build a binary classifier to predict corporate bankruptcy using financial ratio features from the provided Bankruptcy.csv dataset.​
+
+Data: 6,819 records, 96 columns (1 target BankruptcyFlag, 95 numeric predictors), already ratio-transformed and largely numeric.​
+
+Business value: Early detection supports credit risk management and portfolio monitoring by prioritizing at-risk entities.​
+
+Dataset and preprocessing
+
+Loading and schema: Dataset loaded successfully; shape reported as 6,819 × 96 with BankruptcyFlag as target. First five rows inspected to verify feature ranges and cleanliness.​
+
+Missing values: Models trained without runtime errors, indicating no blocking missingness; add explicit NA audit and imputation documentation if present.​
+
+Encoding: All features are numeric ratios; no categorical encoding required.​
+
+Scaling and transformations: Feature scales show standardized/log-like distributions; standardization is recommended for linear models; document scaler choice within pipelines.​
+
+Outliers: Ratio data may contain extremes; include brief note on detection (e.g., IQR) and any robust scaling or winsorization if applied.​
+
+Feature selection: High-dimensional numeric space (95 features). Keep full set for tree ensembles; consider regularized LR or importance-based selection and document if used.​
+
+Imbalance handling: BankruptcyFlag is imbalanced; baseline F1 is modest despite high accuracy/AUC. Recommend class_weight=balanced and/or SMOTE to improve minority recall.​
+
+Split/CV: Holdout split with model comparison; add note on stratification to ensure class proportions preserved.​
+
+Methodology
+
+Problem type: Binary classification with tabular numeric features.​
+
+Models implemented:
+
+Logistic Regression for linear baseline and interpretability.​
+
+Random Forest for non-linear patterns and robustness.​
+
+XGBoost for gradient-boosted performance on tabular data.​
+
+Evaluation metrics: Accuracy, ROC-AUC, F1-Score compared across models; recommend adding precision–recall AUC and confusion matrices for class-imbalance diagnostics.​
+
+Results
+
+Logistic Regression: Accuracy ≈ 0.887, ROC-AUC ≈ 0.857, F1 ≈ 0.278.​
+
+Random Forest: Accuracy ≈ 0.959, ROC-AUC ≈ 0.938, F1 ≈ 0.444.​
+
+XGBoost: Accuracy ≈ 0.962, ROC-AUC ≈ 0.946, F1 ≈ 0.454 (best overall).​
+
+Interpretation: Ensemble methods capture non-linear relationships, outperforming linear baseline; however, F1 indicates room to improve minority detection.​
+
+Key insights
+
+High accuracy with comparatively lower F1 confirms significant class imbalance; cost-sensitive learning or resampling is warranted.​
+
+AUC near 0.95 for top models suggests strong ranking ability; threshold tuning on the precision–recall trade-off can increase recall at acceptable precision.​
+
+Many features are correlated financial ratios; tree ensembles handle redundancy well, while LR benefits from scaling and potential feature selection.​
+
+Recommendations
+
+Apply class weighting and SMOTE, then add PR curves and confusion matrices per model.​
+
+Calibrate probabilities (Platt/Isotonic) and tune decision thresholds to target recall for risk-screening use cases.​
+
+Add stratified cross-validation with consistent random_state; package preprocessing+model in Pipelines.​
+
+Limitations
+
+Potential residual missingness/outliers not fully documented; add explicit audits.​
+
+No domain-driven feature engineering beyond provided ratios; consider aggregations or temporal features if available.
